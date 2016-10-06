@@ -7,7 +7,7 @@ function repo2site(repo, branch, readme)
 		+ repo + '/' + branch + '/' ;
 
 	// get markdown page via AJAX and handle translation
-	function getPage(href) {
+	function getPage(href, replaceState) {
 		Ajax
 			.request({
 				url: stem + href
@@ -20,7 +20,11 @@ function repo2site(repo, branch, readme)
 						'<pre><code>$1</code></pre>')
 				;
 
-				history.pushState({ url: href }, '', '#/' + href);
+				if (replaceState === true)
+					history.replaceState({ url: href }, '', '#/' + href);
+				else
+					history.pushState({ url: href }, '', '#/' + href);
+
 				document.body.innerHTML = html;
 				document.title = document.querySelector('h1').innerText;
 
@@ -39,7 +43,7 @@ function repo2site(repo, branch, readme)
 	// "back" button pressed; handle state transition
 	function popState(e)
 	{
-		getPage(history.state === null ? readme: history.state.url);
+		getPage(history.state === null ? readme : history.state.url);
 	}
 
 	// link was clicked; load page via AJAX
@@ -66,9 +70,9 @@ function repo2site(repo, branch, readme)
 
 	// has a page been specified? if not, fallback to README
 	if (! /^#\/.+/i.exec(location.hash) && history.state === null)
-		getPage(readme);
+		getPage(readme, true);
 	else
-		getPage(location.hash.replace(/^#\//i, ''));
+		getPage(location.hash.replace(/^#\//i, ''), history.state === null);
 
 	// window bindings
 	addEventListener('popstate', popState);
