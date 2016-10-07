@@ -6,6 +6,13 @@ function repo2site(repo, branch, readme)
 	var stem = 'https://raw.githubusercontent.com/'
 		+ repo + '/' + branch + '/' ;
 
+	// link was clicked; load page via AJAX
+	function linkClicked(e)
+	{
+		getPage(this.getAttribute('href').replace(/^#\//, ''));
+		e.preventDefault();
+	}
+
 	// get markdown page via AJAX and handle translation
 	function getPage(href, replaceState) {
 		Ajax
@@ -35,7 +42,17 @@ function repo2site(repo, branch, readme)
 						+ document.body.innerHTML;
 				}
 
-				onLoad(null);
+				// handle link translation and click binding
+				var links = document.querySelectorAll('a[href$=".md"]');
+
+				for (var i = 0; i < links.length; i++) {
+					var ahref = links[i].getAttribute('href');
+
+					if (/^https?:\/\//i.exec(ahref)) continue;
+
+					links[i].setAttribute('href', '#/' + ahref);
+					links[i].addEventListener('click', linkClicked);
+				}
 			})
 		;
 	}
@@ -44,28 +61,6 @@ function repo2site(repo, branch, readme)
 	function popState(e)
 	{
 		getPage(history.state === null ? readme : history.state.url);
-	}
-
-	// link was clicked; load page via AJAX
-	function linkClicked(e)
-	{
-		getPage(this.getAttribute('href').replace(/^#\//, ''));
-		e.preventDefault();
-	}
-
-	// page loaded via AJAX; handle link translation and click binding
-	function onLoad(e)
-	{
-		var links = document.querySelectorAll('a[href$=".md"]');
-
-		for (var i = 0; i < links.length; i++) {
-			var href = links[i].getAttribute('href');
-
-			if (/^https?:\/\//i.exec(href)) continue;
-
-			links[i].setAttribute('href', '#/' + href);
-			links[i].addEventListener('click', linkClicked);
-		}
 	}
 
 	// has a page been specified? if not, fallback to README
