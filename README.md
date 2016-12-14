@@ -9,8 +9,10 @@ attribute so that it calls `repo2site` using your username and repo name.
 You may also specify the branch name (default: `master`) and the name of the
 initial file to load (default: `README.md`).
 
-This currently only works with GitHub, but could easily be adapted to other
-services by replacing the `stem` variable in `repo2site.js`.
+**Update:** You can now also provide the URL stem for the files to be loaded
+via AJAX. You may use the `{repo}` and `{site}` tokens in your URL stem, and
+they will be automatically replaced with the appropriate variables. The current
+default is GitHub, but it could be easily adapated for other hosting services.
 
 ## Example
 

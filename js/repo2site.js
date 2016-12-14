@@ -1,10 +1,12 @@
-function repo2site(repo, branch, readme)
+function repo2site(repo, branch, readme, stem)
 {
-	if (typeof branch === 'undefined') branch = 'master';
-	if (typeof readme === 'undefined') readme = 'README.md';
-
-	var stem = 'https://raw.githubusercontent.com/'
-		+ repo + '/' + branch + '/' ;
+	branch = branch || 'master';
+	readme = readme || 'README.md';
+	// stem can handle {repo} and {branch} tokens
+	stem = (stem || 'https://raw.githubusercontent.com/{repo}/{branch}/')
+		.replace(/\{repo\}/ig, repo)
+		.replace(/\{branch\}/ig, branch)
+	;
 
 	// link was clicked; load page via AJAX
 	function linkClicked(e)
