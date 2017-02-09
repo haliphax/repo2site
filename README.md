@@ -10,7 +10,7 @@ You may also specify the branch name (default: `master`) and the name of the
 initial file to load (default: `README.md`).
 
 **Update:** You can now also provide the URL stem for the files to be loaded
-via AJAX. You may use the `{repo}` and `{site}` tokens in your URL stem, and
+via AJAX. You may use the `{repo}` and `{branch}` tokens in your URL stem, and
 they will be automatically replaced with the appropriate variables. The current
 default is GitHub, but it could be easily adapated for other hosting services.
 
